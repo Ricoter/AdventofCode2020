@@ -5,7 +5,7 @@ Rico van Midde
 =#
 
 # read input
-data = readlines("input/input1.txt")
+data = readlines("input/1")
 data = map(x -> parse(Int,x), data)
 
 # A: Find the two entries that sum to 2020; what do you get if you multiply them together?

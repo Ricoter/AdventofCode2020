@@ -5,7 +5,7 @@ Rico van Midde
 =#
 
 # read input
-data = readlines("input/input2.txt") 
+data = readlines("input/2") 
 println(data[1:3])
 
 
