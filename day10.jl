@@ -29,4 +29,4 @@ println(diff)
 ddiff = diff[begin+1:end] + diff[begin:end-1]
 
 println(ddiff)
-println(7*7*7*7*7*7*2*7*7*4*7*7*4*4*7*2*4*7*4) # why it works i dont know :p 
+println(7*7*7*7*7*7*2*7*7*4*7*7*4*4*7*2*4*7*4) # why it works i dont know :p
