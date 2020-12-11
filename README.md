@@ -1,2 +1,2 @@
 # AdventofCode2020
-2020 run in Julia
+2020 run in Julia v1.5.3
