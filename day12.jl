@@ -20,8 +20,8 @@ ops = Dict([
  ('E', x -> global E += x),
  ('S', x -> global N -= x),
  ('W', x -> global E -= x),
- ('R', x -> part == 1 ? [global d = circshift(d,x)] : global N, E = circshift([N,E,-N,-E], x/90)[1:2]),
- ('L', x -> part == 1 ? [global d = circshift(d,x)] : global N, E = circshift([N,E,-N,-E], -x/90)[1:2]),
+ ('R', x -> part == 1 ? [global d = circshift(d,-x/90)] : global N, E = circshift([N,E,-N,-E], x/90)[1:2]),
+ ('L', x -> part == 1 ? [global d = circshift(d,x/90)] : global N, E = circshift([N,E,-N,-E], -x/90)[1:2]),
  ('F', x -> part == 1 ? [ops[d[1]](x)] : global pos += x*[N,E])
 ])
 
