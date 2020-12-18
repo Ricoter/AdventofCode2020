@@ -7,7 +7,7 @@ Rico van Midde
 # initialize starting numbers
 numbers = [0,5,4,1,10,14,7]
 
-# 
+# simple
 function arrayGame(numbers, n)
     numbers = copy(numbers)
     while length(numbers) < n
@@ -17,6 +17,7 @@ function arrayGame(numbers, n)
     println(numbers[end])        
 end
 
+# fast
 function fastGame(numbers, n)
     L = length(numbers)
     num = Dict{Int, Int}(zip(numbers[begin:end-1], Array(1:L-1)))
