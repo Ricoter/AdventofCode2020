@@ -43,12 +43,10 @@ for line in data
 
     # handle memory
     else
-        strkey, strvalue = split(line, r"mem\[|\] = ", keepempty=false)
-        intkey, intvalue = parse(Int, strkey), parse(Int, strvalue)
-
-        bitkey = int2bit(intkey, 36)  # to 36-bit
-        
-        bitkey[mask .!= "0"] = mask[mask .!= "0"] # mask nonzeros
+        strkey, strvalue = split(line, r"mem\[|\] = ", keepempty=false) # get strings
+        intkey, intvalue = parse(Int, strkey), parse(Int, strvalue)     # to int
+        bitkey = int2bit(intkey, 36)                                    # to 36-bit
+        bitkey[mask .!= "0"] = mask[mask .!= "0"]                       # mask nonzeros
 
         # loop X combinations
         nbits = count(bitkey .== "X")

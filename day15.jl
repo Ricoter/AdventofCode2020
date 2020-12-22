@@ -39,4 +39,4 @@ end
 N = 2020
 # @time arrayGame(numbers, N)
 println("Part One: $(@time fastGame(numbers, N))")
-println("Part One: $(@time fastGame(numbers, 30000000))")
+println("Part One: $(@time fastGame(numbers, 3e7))")
