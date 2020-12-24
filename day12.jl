@@ -31,5 +31,5 @@ println("Part one: $(abs(N)+abs(E))")
 
 # Part two
 N, E, part = 1, 10, 2
-[ops2[x[1]](parse(Int, x[2:end])) for x in data]
+[ops[x[1]](parse(Int, x[2:end])) for x in data]
 println("Part two: $(sum(abs.(pos)))")
