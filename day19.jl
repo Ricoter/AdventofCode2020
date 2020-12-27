@@ -27,8 +27,7 @@ function codes(key)
     elseif part==2 && key=="8" # special rules for part two
         return codes(42)*"+"
     elseif part==2 && key=="11"
-        return "(?P<x>$(codes(42))(?&x)?$(codes(31)))" # regex recursion with named groups
-        # return codes(42)*"(?1)?"*codes(31) # regex recursion with numbered groups
+        return "(?P<g>$(codes(42))(?&g)?$(codes(31)))" # regex recursion with named group g
 
     else                                   
         return join(codes.(x)) # increase depth
