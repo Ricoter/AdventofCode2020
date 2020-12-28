@@ -9,7 +9,7 @@ datacuts = [[1]; findall(data .== "") .+ 1]
 
 # Array{Array} -> BitArray
 to_BitArray(x) = permutedims(hcat(map(collect, x)...)) .== '#'
-clockwise_edges(x) = [x[1,1:10], x[1:10,10], reverse(x[10,1:10]), reverse(x[1:10,1])]
+clockwise_edges(x) = [x[1,1:10], x[1:10,10], x[10,1:10], x[1:10,1]]
 multiply_corners(tiles) = prod([key for (key, value) in tiles if length(value) == 2])
 
 function data2dict(data)
@@ -40,3 +40,4 @@ end
 
 # Part One
 data |> data2dict |> remove_matches |> multiply_corners
+
