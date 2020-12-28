@@ -4,12 +4,17 @@ Julia v1.5.3                        #    ##    ##    ###
 Rico van Midde                       #  #  #  #  #  #   
 =#
 
-data = readlines("input/20")
-datacuts = [[1]; findall(data .== "") .+ 1]
-monster =  permutedims(hcat([split(x,"") for x in readlines("input/20SeaMonster")]...)) .== "#"
+const NESW = [(-1,0), (0,1), (1,0), (0,-1)]        # relative position [North, ...]
 
-to_BitArray(x) = permutedims(hcat(map(collect, x)...)) .== '#'   # '#'?1:0
+to_BitArray(x) = permutedims(hcat(map(collect, x)...)) .== '#'   # Array{Array} -> BitArray, #=>1
 edges(x) = [x[1,1:10], x[1:10,10], x[10,1:10], x[1:10,1]]        # clockwise
+
+
+
+global data = readlines("input/20")
+global monster =  to_BitArray(readlines("input/20SeaMonster")) # 3x20 BitArray{Bool, 2}
+
+datacuts = [[1]; findall(data .== "") .+ 1]
 
 function data2dict(data)
     dict = Dict()
@@ -22,25 +27,11 @@ function data2dict(data)
         grid = Array(grid)          # 10x10 Array{Bool,2}
         dict[tile_number] = grid
     end
-    return dict
+    return dict                     # ID => tile
 end
-tiles = data2dict(data)
+global tiles = data2dict(data)
 
-function remove_matches(tiles)
-    for x in edges(values(tiles)), y in edges(values(tiles)) #<< does not combine with filter
-        for i in x, j in y
-            if x ≠ y && (i == j || i == reverse(j)) # del matching edges
-                filter!(e->e≠i,x)
-                filter!(e->e≠j,y)
-            end
-        end 
-    end
-    return tiles
-end
-
-opposite(i) = (i+1)%4+1
-
-function find_match(a, b)
+function find_match(key_a, key_b)
     """
         args:
             a - used tile key
@@ -51,14 +42,13 @@ function find_match(a, b)
         ~while comparing, tile b is rotated and flipped
         ~since b is a pointer its automatically updated in tiles
     """
-    pos = [(-1,0), (0,1), (1,0), (0,-1)]        # relative position of tile b to a, NESW    <<<<<<<<<<<<
     for (i, edge) in enumerate(edges(tiles[a]))
         for _ = 1:4                         
-            tiles[b] = rotr90(tiles[b])         # 4x rotate
+            tiles[b] = rotr90(tiles[b])               # 4x rotate
             for _ = 1:2                    
-                tiles[b] = transpose(tiles[b])  # 2x flip
-                if edge == edges(tiles[b])[opposite(i)]
-                    return pos[i]
+                tiles[b] = transpose(tiles[b])        # 2x flip
+                if edge == edges(tiles[b])[(i+1)%4+1] # compare to opposite edges
+                    return NESW[i]
                 end
             end
         end
@@ -78,7 +68,7 @@ function puzzle_time(tiles)
     puzzle[10,10] = collect(tiles)[1][1]                # with random tile in the centre
     while count(puzzle .!= 0) < length(tiles)           # loop till all tiles are used
         used = puzzle[puzzle .!= 0]                     # list used / unused tiles
-        unused = filter(e -> e∉used, keys(tiles)) 
+        unused = filter(e -> e ∉ used, keys(tiles)) 
 
         # find element of used in dict also for reversed
         # rotate and reverse inside original tile dict
@@ -87,7 +77,7 @@ function puzzle_time(tiles)
         for x in used, y in unused                      # get 2 keys from used and tiles
             relpos = find_match(x,y)
             if relpos != false
-                current_pos = Tuple(findall(puzzle .== x)[1]) #+ pos error if findall returns more <<<<<<<<<<<<
+                current_pos = Tuple(findall(puzzle .== x)[1])
                 newpos = current_pos .+ relpos
                 puzzle[newpos...] = y
                 break
@@ -112,7 +102,7 @@ function find_monsters(img)
     """sliding window"""
     mimg = falses(size(img))              # img with only monsters
     for _ = 1:4                         
-        global monster = rotr90(monster)         # 4x rotate
+        global monster = rotr90(monster)  # 4x rotate
         for _ = 1:2                    
             monster = transpose(monster)  # 2x flip
             for i=1:size(img)[1]-size(monster)[1],j=1:size(img)[2]-size(monster)[2]
@@ -123,11 +113,9 @@ function find_monsters(img)
             end
         end
     end
-    return mimg 
+    return img, mimg 
 end
-# Part One
-# data |> data2dict |> remove_matches |> multiply_corners
 
-img = data |> data2dict |> puzzle_time |> make_img 
-mimg = find_monsters(img)
-println("Part Two: ", count(img) - count(mimg))
+# Part Two
+img, mimg = data |> data2dict |> puzzle_time |> make_img |> find_monsters
+count(img) - count(mimg)
