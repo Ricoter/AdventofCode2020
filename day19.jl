@@ -29,7 +29,7 @@ function codes(key)
     elseif part==2 && key=="11"
         return "(?P<g>$(codes(42))(?&g)?$(codes(31)))" # regex recursion with named group g
 
-    else                                   
+    else         
         return join(codes.(x)) # increase depth
     end
 end

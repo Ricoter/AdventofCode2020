@@ -4,12 +4,10 @@ Julia v1.5.3                        #    ##    ##    ###
 Rico van Midde                       #  #  #  #  #  #   
 =#
 
-const NESW = [(-1,0), (0,1), (1,0), (0,-1)]        # relative position [North, ...]
+const NESW = [(-1,0), (0,1), (1,0), (0,-1)]                    # relative position [North, ...]
 
-to_BitArray(x) = permutedims(hcat(map(collect, x)...)) .== '#'   # Array{Array} -> BitArray, #=>1
-edges(x) = [x[1,1:10], x[1:10,10], x[10,1:10], x[1:10,1]]        # clockwise
-
-
+to_BitArray(x) = permutedims(hcat(map(collect, x)...)) .== '#' # Array{Array} -> BitArray, #=>1
+edges(x) = [x[1,1:10], x[1:10,10], x[10,1:10], x[1:10,1]]      # clockwise
 
 global data = readlines("input/20")
 global monster =  to_BitArray(readlines("input/20SeaMonster")) # 3x20 BitArray{Bool, 2}
@@ -31,7 +29,7 @@ function data2dict(data)
 end
 global tiles = data2dict(data)
 
-function find_match(key_a, key_b)
+function find_match(a, b)
     """
         args:
             a - used tile key
@@ -63,7 +61,7 @@ function remove_zero_padding(A)
 end
 
 function puzzle_time(tiles)
-    """returns complete puzzle"""
+    """returns complete ID puzzle"""
     puzzle = zeros(Int, 30, 30)                         # too large grid
     puzzle[10,10] = collect(tiles)[1][1]                # with random tile in the centre
     while count(puzzle .!= 0) < length(tiles)           # loop till all tiles are used
@@ -74,7 +72,7 @@ function puzzle_time(tiles)
         # rotate and reverse inside original tile dict
         # so that all tiles are in correct orientation
 
-        for x in used, y in unused                      # get 2 keys from used and tiles
+        for x in used, y in unused                      # x, y are keys
             relpos = find_match(x,y)
             if relpos != false
                 current_pos = Tuple(findall(puzzle .== x)[1])
