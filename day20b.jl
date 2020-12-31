@@ -1,5 +1,5 @@
 #=
-Advent of Code 2020, Day 19                           # 
+Advent of Code 2020, Day 20                           # 
 Julia v1.5.3                        #    ##    ##    ###
 Rico van Midde                       #  #  #  #  #  #   
 =#
