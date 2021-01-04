@@ -33,7 +33,7 @@ p1, p2 = map.(x -> parse(Int, x), [p1,p2])
 # p1, p2 = [9, 2, 6, 3, 1], [5, 8, 4, 7, 10] # 291
 
 function game(p1, p2)
-    prev_hash = []
+    prev_hash = Set()
     while true
         # return winner
         if length(p1) == 0
@@ -43,7 +43,7 @@ function game(p1, p2)
         end
 
         # Inf game prevention rule
-        (h =hash([p1,p2])) ∉ prev_hash ? append!(prev_hash, h) : (return (1, copy(p1)))
+        (h =hash([p1,p2])) ∉ prev_hash ? push!(prev_hash, h) : (return (1, copy(p1)))
 
         # play round
         if p1[1] <= length(p1)-1 && p2[1] <= length(p2)-1 # recursive game

@@ -103,7 +103,7 @@ function find_monsters(img)
         global monster = rotr90(monster)  # 4x rotate
         for _ = 1:2                    
             monster = transpose(monster)  # 2x flip
-            for i=1:size(img)[1]-size(monster)[1],j=1:size(img)[2]-size(monster)[2]
+            for i=1:size(img)[1]-size(monster)[1],j=1:size(img)[2]-size(monster)[2] # sliding window
                 position = i:i+size(monster)[1]-1,j:j+size(monster)[2]-1
                 if all(img[position...][monster])
                     mimg[position...] = monster
