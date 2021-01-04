@@ -10,13 +10,13 @@ data = [7,1,2,6,4,3,5,8,9]
 function game(x, N)
     """fast insertion game"""
     LEN, MAX = length(x), maximum(x)
-    current = x[1]
+    current = first(x)
 
     # linked list?
-    d = Dict(y => x[mod1(i+1, LEN)] for (i, y) in enumerate(x))
+    d = Dict(x[i] => x[mod1(i+1, LEN)] for i=1:LEN)
 
     for _=1:N
-        # triple values
+        # triple values (copy)
         triple = [d[current], d[d[current]], d[d[d[current]]]]
 
         # insertion value
@@ -36,8 +36,8 @@ function game(x, N)
     return d
 end
 
-function to_array(d, start, steps)
-    x = [d[start]]
+function to_array(d, startvalue, steps)
+    x = [d[startvalue]]
     for _ in 1:steps-1
         append!(x, d[x[end]])
     end
