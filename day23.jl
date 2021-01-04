@@ -10,8 +10,6 @@ data = [7,1,2,6,4,3,5,8,9]
 function game(x, N)
     """fast insertion game"""
     LEN, MAX = length(x), maximum(x)
-
-    # set current value
     current = x[1]
 
     # linked list?
@@ -39,7 +37,6 @@ function game(x, N)
 end
 
 function to_array(d, start, steps)
-    """returns array of length [steps], starting at [start]"""
     x = [d[start]]
     for _ in 1:steps-1
         append!(x, d[x[end]])
