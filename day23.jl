@@ -14,7 +14,6 @@ function game(x, N)
 
     # linked list?
     d = Dict(x[i] => x[mod1(i+1, LEN)] for i=1:LEN)
-
     for _=1:N
         # triple values (copy)
         triple = [d[current], d[d[current]], d[d[d[current]]]]
@@ -45,8 +44,8 @@ function to_array(d, startvalue, steps)
 end
 
 # Part One
-@time d = game(data, 100)
-println(join(to_array(d, 1, 8)))
+# @time d = game(data, 100)
+# println(join(to_array(d, 1, 8)))
 
 # Part Two
 x = Int32[data; 10:1e6]
