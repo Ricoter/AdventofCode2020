@@ -1,52 +1,32 @@
 #=
 Advent of Code 2020, Day 13
-Julia v1.5.3
+Julia v1.5.3                    🚐      🚐      🚐
 Rico van Midde
 =#
 
 # read input
 data = readlines("input/13")
+N, data = parse(Int, data[1]), split(data[2], ",")
+ID_bus = [parse(Int, x) for x in data if x != "x"]
 
-# show some data
-println(data)
+# Part One
+t_wait = ID_bus .* ceil.(Int, N ./ ID_bus) .% N
+p1 = prod(minimum(zip(t_wait, ID_bus)))
+println("Part One: $p1")
 
-# prepare data
-target, data = parse(Int, data[1]), split(data[2], ",")
+# Part Two
+ID_bus = [[i,parse(Int, x)] for (i,x) in enumerate(b) if x != "x"]
 
+function firstmatch(b, diff)
+    """ 
+    Vectorized version of the Chinese remainder theorem based on
+        https://en.wikipedia.org/wiki/Chinese_remainder_theorem
+        https://rosettacode.org/wiki/Chinese_remainder_theorem
+    """
+    B = prod(b) # common factor
+    remainder = sum(diff .* invmod.(B .÷ b, b) .* (B .÷ b)) % B
+    return B - remainder
+end
 
-# Part one
-bus = [parse(Int, x) for x in data if x != "x"]
-t = [x-target%x for x in bus]
-println("Part one: $(bus[argmin(t)]*minimum(t))")
-
-# testdata
-test = 1
-data = split(readlines("input/13t")[test], ",")
-bus = [parse(Int, x) for x in data if x != "x"]
-
-# Part two (149814 < ans)
-using LinearAlgebra
-A = Array(hcat(Diagonal(bus),-ones(length(bus))))
-b = [index for (index, value) in enumerate(data) if value != "x"]
-type = Int
-A, b = map(type, A), map(type, b)
-
-# data = [(bus[i], b[i]) for i in 1:length(bus)]
-# using LLLplus
-# integerfeasibility(A,b)
-# n = 16
-# [(x-n%x)==i for (x, i) in data]
-
-# c = A\b
-# dot(c,   inv(c))
-
-# Solve set of linear equation with integer coefficients
-# x1*b1  = y
-# x2*b2 - x1*b1 = c2     
-# x3*b3 - x2*b2 = c3 + c2
-
-# x = copy(c)
-
-# [x = x/x[i] for i in 1:9]
-
-# \(Int,A,b)
+diff, bus = collect(zip(ID_bus...))
+println("Part Two: ", firstmatch(bus, diff .- 1))

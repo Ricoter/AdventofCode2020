@@ -37,4 +37,4 @@ pairs = [(collect(keys(d))[i], allergens[i][1]) for i=1:length(d)]
 # str = join(sort(pairs))
 # reg = replace(str, r"(|\\|\"| |)" => "")
 x = [x[2] for x in sort!(pairs)]
-join(x, ",")
+println("Part Two: ", join(x, ","))

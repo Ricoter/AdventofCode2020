@@ -7,19 +7,18 @@ using Plots
 
 function to_hardzero(c::Complex)
     """Hard zero to prevent doubles in Dict"""
-    c = round(c, digits=3) # round for machine epsilon deviation
+    c = round(c, digits=3)                       # round for machine epsilon deviation
     Re = real(c) === -0.0 ? 0.0 : real(c)
     Im = imag(c) === -0.0 ? 0.0 : imag(c)
     return Re + Im*im
 end
 
 adj(x) = to_hardzero.(exp.(im*2pi/6*(0:5)) .+ x) # using the complex unit circle in 6 equal pieces 
-n_blacks(d) = count(values(d) .== 1) # 1's are black tiles, -1 is white
+n_blacks(d) = count(values(d) .== 1)             # 1's are black tiles, -1 is white
 
-# constants are faster
-const data = readlines("input/24")
-const REF = 0+0im # reference point 
-const moves = Dict(["e", "ne", "nw", "w", "sw", "se"] .=> adj(REF)) # compas
+data = readlines("input/24")
+REF = 0+0im                                      # reference point 
+moves = Dict(["e", "ne", "nw", "w", "sw", "se"] .=> adj(REF))
 
 function PartOne()
     """Read data without dilimiters and flip tiles"""
@@ -39,7 +38,6 @@ function PartOne()
         # flip tiles
         x = to_hardzero(x)
         x in keys(tiles) ? tiles[x] *= -1 : tiles[x] = 1  # flip/add tile
-        check(tiles)
     end
     return tiles
 end
@@ -51,28 +49,28 @@ function fill(d::Dict)
     diag = 2r+1                     # diagonal
 
     # upperhalf
-    for v in 0:r                # vertical
-        x = r .+ v*moves["nw"] + REF
-        for _ in 1:diag-v       # horizontal
+    for v in 0:r                    # vertical
+        x = r .+ v * moves["nw"]
+        for _ in 1:diag-v           # horizontal
             x = to_hardzero(x)
             if x ∉ keys(tiles)
-                tiles[x] = -1   # init white
+                tiles[x] = -1       # init white
             end
             x += moves["w"]
         end
     end
 
     # lower half
-    for x in conj.(keys(d))     # complex conjugate
+    for x in conj.(keys(d))         # complex conjugate
         x = to_hardzero(x)
         if x ∉ keys(tiles)
-            tiles[x] = -1       # init white
+            tiles[x] = -1           # init white
         end
     end
     return tiles
 end
 
-function add_gridplot(x, label)
+function add_gridplot(x)
     scatter(
         x,
         xlim = [-55, 55],
@@ -108,9 +106,9 @@ function update(N_sweeps, tiles)
 
         blacks = [k for (k,v) in tiles if v == 1]
         println("$i: $(length(blacks))")
-        add_gridplot(blacks, "b")
+        add_gridplot(blacks)
     end every 1
-    gif(anim, "day23_TileArt.gif", fps=15)
+    gif(anim, "day24_TileArt.gif", fps=15)
     return tiles
 end
 
