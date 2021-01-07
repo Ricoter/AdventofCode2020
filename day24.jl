@@ -16,9 +16,10 @@ end
 adj(x) = to_hardzero.(exp.(im*2pi/6*(0:5)) .+ x) # using the complex unit circle in 6 equal pieces 
 n_blacks(d) = count(values(d) .== 1) # 1's are black tiles, -1 is white
 
-data = readlines("input/24")
-REF = 0+0im # reference point 
-moves = Dict(["e", "ne", "nw", "w", "sw", "se"] .=> adj(0)) # compas
+# constants are faster
+const data = readlines("input/24")
+const REF = 0+0im # reference point 
+const moves = Dict(["e", "ne", "nw", "w", "sw", "se"] .=> adj(REF)) # compas
 
 function PartOne()
     """Read data without dilimiters and flip tiles"""
@@ -57,7 +58,6 @@ function fill(d::Dict)
             if x ∉ keys(tiles)
                 tiles[x] = -1   # init white
             end
-            # check(tiles)
             x += moves["w"]
         end
     end
@@ -68,7 +68,6 @@ function fill(d::Dict)
         if x ∉ keys(tiles)
             tiles[x] = -1       # init white
         end
-        # check(tiles)
     end
     return tiles
 end
@@ -81,9 +80,7 @@ function add_gridplot(x, label)
         title = "Living Art Exhibit at the Lobby",
         marker = (0.5, :hex, 2.5),
         label = false,
-        bg = RGB(0.2, 0.2, 0.2),
-        # grid = false,
-        # axis=([], false)
+        bg = RGB(0.2, 0.2, 0.2)
         )
 end
 
